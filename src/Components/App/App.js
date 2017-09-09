@@ -9,18 +9,39 @@ class App extends Component {
       super(props);
       this.state = {
         searchResults:[
-          {name:'name',artist:'artist',album:'album',id:'4'},
-          {name:'name',artist:'artist',album:'album',id:'5'},
-          {name:'name',artist:'artist',album:'album',id:'6'},
+          {name:'name1',artist:'artist',album:'album',id:'4'},
+          {name:'name2',artist:'artist',album:'album',id:'5'},
+          {name:'name3',artist:'artist',album:'album',id:'6'},
         ],
         playlistName:"PlayListName",
-        playlistTracks:[
-          {name:'name',artist:'artist',album:'album',id:'1'},
-          {name:'name',artist:'artist',album:'album',id:'2'},
-          {name:'name',artist:'artist',album:'album',id:'3'},
-        ]
+        playlistTracks:[]
       };
+      this.addTrack = this.addTrack.bind(this);
+      this.removeTrack = this.removeTrack.bind(this);
+      this.changeTrack = this.changeTrack.bind(this);
+  }
 
+  changeTrack(track,isRemoval) {
+    if(isRemoval) {
+      this.removeTrack(track);
+    } else {
+      this.addTrack(track);
+    }
+  }
+
+  removeTrack(track) {
+      let playlistTracks = this.state.playlistTracks.filter(playListTrack => playListTrack.id !== track.id);
+      this.setState({playlistTracks:playlistTracks});
+
+  }
+
+  addTrack(track) {
+      let playlistTracks = this.state.playlistTracks;
+      if(!playlistTracks.find(playlistTrack => playlistTrack.id === track.id)) {
+        playlistTracks.push(track);
+        this.setState({playlistTracks:playlistTracks});
+      }
+      return false;
   }
 
   render() {
@@ -30,8 +51,10 @@ class App extends Component {
     <div className="App">
       <SearchBar />
       <div className="App-playlist">
-        <SearchResults searchResults={this.state.searchResults}/>
-        <Playlist playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/>
+        <SearchResults
+          onChange={this.changeTrack} searchResults={this.state.searchResults}/>
+        <Playlist
+          onChange={this.changeTrack} playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/>
       </div>
     </div>
   </div>
