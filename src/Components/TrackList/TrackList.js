@@ -8,8 +8,8 @@ class TrackList extends React.Component {
               <div className="TrackList">
                 {this.props.tracks.map(track => {
                   return <Track
-                    toggleRemoval={this.toggleRemoval}
-                    onChange={this.props.onChange}
+                    onRemove={this.props.onRemove}
+                    onAdd={this.props.onAdd}
                     key={track.id}
                     track={track}
                     isRemoval={this.props.isRemoval}

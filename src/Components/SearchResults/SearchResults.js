@@ -10,7 +10,7 @@ class SearchResults extends React.Component {
                 <div className="SearchResults">
                       <h2>Results</h2>
                       <TrackList
-                        toggleRemoval={this.toggleRemoval}  isRemoval={false} onChange={this.props.onChange} tracks={this.props.searchResults}/>
+                       isRemoval={false} onAdd={this.props.onAdd} tracks={this.props.searchResults}/>
                       </div>
 
             );
