@@ -29,19 +29,19 @@ class App extends Component {
     }
   }
 */
-  removeTrack(track) {
-      let playlistTracks = this.state.playlistTracks.filter(playListTrack => playListTrack.id !== track.id);
-      this.setState({playlistTracks:playlistTracks});
+removeTrack(track) {
+  let tracks = this.state.playlistTracks;
+  tracks = tracks.filter(currentTrack => currentTrack.id !== track.id);
+  this.setState({playlistTracks: tracks});
+}
 
-  }
-
-  addTrack(track) {
-      let playlistTracks = this.state.playlistTracks;
-      if(!playlistTracks.find(playlistTrack => playlistTrack.id === track.id)) {
-        playlistTracks.push(track);
-        this.setState({playlistTracks:playlistTracks});
-      }
-      return false;
+addTrack(track) {
+    let tracks = this.state.playlistTracks;
+    if (tracks.find(savedTrack => savedTrack.id === track.id)) {
+      return;
+    }
+    tracks.push(track);
+    this.setState({playlistTracks: tracks});
   }
 
   render() {
