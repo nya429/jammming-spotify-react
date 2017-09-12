@@ -8,7 +8,7 @@ class SearchBar extends Component {
       term:""
     };
     this.search = this.search.bind(this);
-    this.handleTermChange  = this.handleTermChange .bind(this);
+    this.handleTermChange = this.handleTermChange.bind(this);
   }
 
   handleTermChange(event) {

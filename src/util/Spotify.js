@@ -3,8 +3,8 @@
 //Send a search request to the Spotify API
 //Save a user's playlist to their Spotify account.
 const clientId = '429c0efa1b924e15a334ed5a3c7b259c';
-const clientSecret = '5db9e2e995314407a78aa0ff08df8fbe';
-const redirectUri = 'https://localhost:3000/';
+//const clientSecret = '5db9e2e995314407a78aa0ff08df8fbe';
+const redirectUri = 'http://localhost:3000/';
 const scope = 'playlist-modify-public';
 let accessToken;
 
@@ -28,6 +28,7 @@ const Spotify = {
     //str.match(regexp)
     const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
     const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
+//  //http://localhost:3000/#access_token=BQAP-HzJlRSRJkcnGOxbg8boF5TMAwfRxdF_tjrPSnuFquvmCkbgsWeCbORYvHjYe6QWRJy5jlP1kgVL54LOTGoRGeLBhyrXRZQMbB9ojYbDU9VdN0kG48NIRjECYkCTVsjCGe8HhfRzvzrdUod0Xad3-CkKlgh8G0BA94Pgl7waxofSkA&token_type=Bearer&expires_in=3600
 
     if (accessTokenMatch && expiresInMatch) {
         accessToken = accessTokenMatch[1]; //Set the access token value
@@ -36,26 +37,31 @@ const Spotify = {
         window.history.pushState('Access Token', null, '/');
         return accessToken;
     } else {
-          const url = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=${scope}&redirect_uri=${redirectUri}`;
-          window.location.assign(redirectUri);
+          const url = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&showscope=${scope}&redirect_uri=${redirectUri}`;
+          window.location.assign(url);
     }
   },
   search(term) {
-    return Spotify.getAccessToken().then(()=>{
+    accessToken = Spotify.getAccessToken();
       let url = `https://api.spotify.com/v1/search?type=track&q=${term}`;
       return fetch(url,{
-            method:'GET',
             headers: {
               Authorization: `Bearer ${accessToken}`}
-            });
-          }).then(
+            }).then(
       response => response.json()
-    ).then(
-      jsonResponse => {
-        console.log(jsonResponse);
+    ).then(jsonResponse => {
+      if(!jsonResponse.tracks) {
         return [];
-      }
-    );
+      } else {
+        return( jsonResponse.tracks.items.map(item => ({
+          id:item.id,
+          name:item.name,
+          artist:item.album.artists[0].name,
+          album:item.album.name,
+          uri:item.uri
+        }))
+      );}
+      });
   }
 }
 

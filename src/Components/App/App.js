@@ -9,17 +9,9 @@ class App extends Component {
   constructor(props) {
       super(props);
       this.state = {
-        searchResults:[
-          {name:'name1',artist:'artist',album:'album',id:'4'},
-          {name:'name2',artist:'artist',album:'album',id:'5'},
-          {name:'name3',artist:'artist',album:'album',id:'6'},
-        ],
+        searchResults:[],
         playlistName:"New PlayList",
-        playlistTracks:[
-          {name:'name1',artist:'artist',album:'album',id:'4'},
-          {name:'name2',artist:'artist',album:'album',id:'5'},
-          {name:'name3',artist:'artist',album:'album',id:'6'},
-        ]
+        playlistTracks:[]
       };
       this.addTrack = this.addTrack.bind(this);
       this.removeTrack = this.removeTrack.bind(this);
@@ -38,7 +30,7 @@ class App extends Component {
   }
 */
 search(searchTerm) {
-  Spotify.search(searchTerm);
+  Spotify.search(searchTerm).then(searchResults => this.setState({searchResults:searchResults}));
 }
 
 savePlaylist(event) {
