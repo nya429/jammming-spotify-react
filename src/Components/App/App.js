@@ -34,8 +34,18 @@ search(searchTerm) {
 }
 
 savePlaylist(event) {
-  const trackURIs = this.state.playlistTracks.map(playlistTrack => playlistTrack.id);
-  console.log(trackURIs);
+  const trackUris = this.state.playlistTracks.map(playlistTrack => playlistTrack.id);
+  Spotify.savePlaylist(this.state.playlistName,trackUris).then(status => {
+    if(status) {
+      alert('PlayList Created');
+      this.setState({
+          searchResults:[],
+          playlistName:"New PlayList",
+          playlistTracks:[]
+        });
+    }
+  }
+  );
 }
 
 updatePlaylistName (name) {
