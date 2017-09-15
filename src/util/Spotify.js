@@ -107,10 +107,7 @@ const Spotify = {
 
   //Retrieve user's playlists
   getUserPlayLists() {
-    if(!userId) {
-      return Promise.resolve(false);
-    }
-    return  fetch(`https://api.spotify.com/v1/users/${userId}/playlists`,{
+    return  this.getCurrentUserId().then(() =>fetch(`https://api.spotify.com/v1/users/${userId}/playlists`,{
         method:'GET',
         headers:{
           Authorization: `Bearer ${accessToken}`,
@@ -130,8 +127,58 @@ const Spotify = {
                       playlistName:item.name}
                     ));
             }
-          });
+          }));
   },
+
+  //used to retrieve a playlist tracks
+  getPlaylistTracks(playlistId) {
+    return this.getCurrentUserId().then(() => fetch(
+        `https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`,{
+            method:'GET',
+            headers:{
+                Authorization: `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+      }).then(
+        response => response.json()
+      ).then(
+        jsonResponse => {if(!jsonResponse.items) {
+            console.log('getPlaylistTracks null')
+            return [];
+          } else {
+            console.log('getPlaylistTracks success');
+            return jsonResponse.items.map(item => (
+        {
+          id:item.track.id,
+          name:item.track.name,
+          artist:item.track.album.artists[0].name,
+          album:item.track.album.name,
+          uri:item.track.uri
+        }
+                  ));
+          }}
+        ));
+  },
+
+  createPlaylist(playlistName) {
+    if(!playlistName) {
+        return Promise.resolve(false);
+    }
+
+    return Spotify.getCurrentUserId().then(() => fetch(
+            `https://api.spotify.com/v1/users/${userId}/playlists`,{
+                method:'POST',
+                headers:{
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({name: playlistName})
+            })).then(
+            response => response.json()
+        ).then(
+            jsonResponse => jsonResponse.id
+          );
+  }
 }
 
 export default Spotify;

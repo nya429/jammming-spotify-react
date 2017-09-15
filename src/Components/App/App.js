@@ -36,13 +36,12 @@ class App extends Component {
     onEdit(playlistItem) {
 
       this.updatePlaylistName(playlistItem.playlistName);
-      console.log(this.state.playlistName);
+      Spotify.getPlaylistTracks(playlistItem.playlistId).then(tracks => this.setState({playlistTracks:tracks}));
     }
 
     getUserPlayLists() {
       console.log('getUserPlayLists')
-      Spotify.getUserPlayLists().then(a=> console.log(a));
-      //Spotify.getUserPlayLists().then(playlists => {this.setState({playlistList:playlists})});
+      Spotify.getUserPlayLists().then(playlists => {this.setState({playlistList:playlists})});
     }
 
     search(searchTerm) {
