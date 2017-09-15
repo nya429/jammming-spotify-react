@@ -8,6 +8,10 @@ class Playlist extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this);
   }
 
+  componentWillMount() {
+
+  }
+
   handleNameChange(event) {
     this.props.onNameChange(event.target.value);
   }
@@ -15,7 +19,7 @@ class Playlist extends React.Component {
   render() {
     return (
                 <div className="Playlist">
-                  <input onChange={this.handleNameChange} defaultValue ={"New PlayList"}/>
+                  <input onChange={this.handleNameChange} value={this.props.playlistName}/>
                   <TrackList
                     isRemoval={true}
                     onRemove={this.props.onRemove}
