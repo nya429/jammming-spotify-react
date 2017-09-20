@@ -52,36 +52,27 @@ const Spotify = {
         });
     },
 
+  updatePlaylistTracks(trackUris,playlistId) {
+    return fetch(
+          `https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`,{
+              method:'PUT',
+              headers:{
+                  Authorization: `Bearer ${accessToken}`,
+                  'Content-Type': 'application/json'
+              },
+              body:JSON.stringify({uris: trackUris.map(trakUri => 'spotify:track:' + trakUri)})
+          }).then(response => response.status === 201);
+  },
+
   savePlaylist(playlistName,trackUris) {
         if(!(playlistName&&trackUris.length)) {
             return Promise.resolve(false);
         }
+        //if playlist.id in playlistList obj, then       upadte the palylist,
+        //if playlist id isn't in the play listobj       create a playlist and then update the playlist.
 
-        return Spotify.getCurrentUserId().then(() => fetch(
-                `https://api.spotify.com/v1/users/${userId}/playlists`,{
-                    method:'POST',
-                    headers:{
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body:JSON.stringify({name: playlistName})
-                })).then(
-                response => response.json()
-            ).then(
-                jsonResponse => {
-                  console.log(jsonResponse);
-                    let playlistId = jsonResponse.id;
-                    return fetch(
-                        `https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`,{
-                            method:'POST',
-                            headers:{
-                                Authorization: `Bearer ${accessToken}`,
-                                'Content-Type': 'application/json'
-                            },
-                            body:JSON.stringify({uris: trackUris.map(trakUri => 'spotify:track:' + trakUri)})
-                        }).then(response => response.status === 201);
+        return Spotify.createPlaylist(playlistName).then(playlistId => Spotify.updatePlaylistTracks(trackUris,playlistId));
 
-                });
 
     },
 
@@ -124,7 +115,7 @@ const Spotify = {
               console.log('getUserPlayLists success');
               return jsonResponse.items.map(item => (
                       {playlistId:item.id,
-                      playlistName:item.name}
+                       playlistName:item.name}
                     ));
             }
           }));
@@ -178,7 +169,20 @@ const Spotify = {
         ).then(
             jsonResponse => jsonResponse.id
           );
+  },
+
+  updatePlaylistName(playlistId,playlistName) {
+    return Spotify.getCurrentUserId().then(()=> fetch(
+      `https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}`,{
+        method:'PUT',
+        headers:{
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({name:playlistName})
+      })).then(response => response.status === 200);
   }
+
 }
 
 export default Spotify;
