@@ -69,11 +69,11 @@ class App extends Component {
         //1) update the playlistName
         //2) update the playlistTrack TODO: uncheck state of playlistTracks
         if(playlistId) {
-          this.updateCurrentPlaylist(playlistId,playlistName,trackUris);
+          return this.updateCurrentPlaylist(playlistId,playlistName,trackUris);
         }
         //The playlistId is not in the playlistList
         //create a playlist and then update the playlist.
-        this.createPlaylist(playlistId,playlistName,trackUris);
+        return this.createPlaylist(playlistId,playlistName,trackUris);
     }
 
     createPlaylist(playlistId,playlistName,trackUris) {
