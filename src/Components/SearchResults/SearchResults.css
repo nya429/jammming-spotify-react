@@ -2,9 +2,38 @@
   width: 50%;
   height: 950px;
   overflow-y: scroll;
-  padding: .88rem;
+  padding: 1.88rem;
   background-color: rgba(1, 12, 63, 0.7);
   box-shadow: 0 4px 2px 2px #000000;
+}
+/*
+.header-cont {
+    position:fixed;
+    top:0px;
+    width:100%;
+}
+*/
+.page {
+  box-sizing: border-box;
+  cursor:pointer;
+  padding: 10px;
+  background-color: #010c3f;
+  text-align: center;
+  font-size: .833rem;
+  transition: background-color .25s;
+}
+
+.currentPage {
+
+  padding: 10px;
+  text-align: center;
+  font-size: 1.233rem;
+  font-weight: bold;
+  transition: background-color .25s;
+}
+
+.page:hover {
+  color: rgba(265, 265, 265, .5);
 }
 
 ::-webkit-scrollbar {

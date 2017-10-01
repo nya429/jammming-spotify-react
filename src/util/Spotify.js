@@ -25,31 +25,60 @@ const Spotify = {
         }
     },
 
-    search(term) {
+    handleSearch (url, limit = 20) {
+      return fetch(url,{
+          headers: {
+              Authorization: `Bearer ${accessToken}`}
+      }).then(
+          response => response.json()
+      ).then(jsonResponse => {
+        console.log(jsonResponse)
+          if(!jsonResponse.tracks) {
+              return   {
+                  tracks:[],
+                  total:null,
+                  next:null,
+                  limit:null,
+                  offset:null,
+                  previous:null,
+                  href:null
+                };
+          } else {
+              let tracks = jsonResponse.tracks.items.map(item => ({
+                      id:item.id,
+                      name:item.name,
+                      artist:item.album.artists[0].name,
+                      album:item.album.name,
+                      uri:item.uri
+                  }));
+              let results = {
+                tracks:tracks,
+                total:jsonResponse.tracks.total,
+                next:jsonResponse.tracks.next,
+                limit:jsonResponse.tracks.limit,
+                offset:jsonResponse.tracks.offset,
+                previous:jsonResponse.tracks.previous,
+                href:jsonResponse.tracks.href
+              }
+              return results;
+              /*
+              return( jsonResponse.tracks.items.map(item => ({
+                      id:item.id,
+                      name:item.name,
+                      artist:item.album.artists[0].name,
+                      album:item.album.name,
+                      uri:item.uri
+                  }))
+              );
+              */
+            }
+      });
+    },
+
+    search (term, limit = 20, offset = 0) {
         const accessToken = Spotify.getAccessToken();
-        /*
-        let limit = 20;
-        let page = 1;
-        let offset = (page-1)*limit;*/
-        let url = `https://api.spotify.com/v1/search?type=track&q=${term}`;
-        return fetch(url,{
-            headers: {
-                Authorization: `Bearer ${accessToken}`}
-        }).then(
-            response => response.json()
-        ).then(jsonResponse => {
-            if(!jsonResponse.tracks) {
-                return [];
-            } else {
-                return( jsonResponse.tracks.items.map(item => ({
-                        id:item.id,
-                        name:item.name,
-                        artist:item.album.artists[0].name,
-                        album:item.album.name,
-                        uri:item.uri
-                    }))
-                );}
-        });
+        let url = `https://api.spotify.com/v1/search?type=track&q=${term}&limit=${limit}&offset=${offset}`;
+        return this.handleSearch(url,limit);
     },
 
   updatePlaylistTracks(trackUris,playlistId) {
