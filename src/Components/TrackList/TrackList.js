@@ -10,6 +10,7 @@ class TrackList extends React.Component {
                   return <Track
                     onRemove={this.props.onRemove}
                     onAdd={this.props.onAdd}
+                    onMouseOver={this.props.onMouseOver}
                     key={track.id}
                     track={track}
                     isRemoval={this.props.isRemoval}

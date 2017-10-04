@@ -68,7 +68,7 @@ class SearchResults extends React.Component {
                           {this.renderPage(this.props.searchResults)}
                       </div>
                       <TrackList
-                       isRemoval={false} onAdd={this.props.onAdd} tracks={this.props.searchResults.tracks}/>
+                       isRemoval={false} onMouseOver={this.props.onMouseOver} onAdd={this.props.onAdd} tracks={this.props.searchResults.tracks}/>
                       </div>
 
             );

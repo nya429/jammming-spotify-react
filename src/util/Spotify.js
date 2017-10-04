@@ -48,6 +48,7 @@ const Spotify = {
                       id:item.id,
                       name:item.name,
                       artist:item.album.artists[0].name,
+                      image:item.album.images[2].url,
                       album:item.album.name,
                       uri:item.uri
                   }));
@@ -75,13 +76,13 @@ const Spotify = {
       });
     },
 
-    search (term, limit = 20, offset = 0) {
-        const accessToken = Spotify.getAccessToken();
+  search (term, limit = 20, offset = 0) {
         let url = `https://api.spotify.com/v1/search?type=track&q=${term}&limit=${limit}&offset=${offset}`;
         return this.handleSearch(url,limit);
-    },
+  },
 
   updatePlaylistTracks(trackUris,playlistId) {
+    const accessToken = Spotify.getAccessToken();
     return fetch(
           `https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`,{
               method:'PUT',
@@ -172,6 +173,7 @@ const Spotify = {
           id:item.track.id,
           name:item.track.name,
           artist:item.track.album.artists[0].name,
+          image:item.track.album.images[2].url,
           album:item.track.album.name,
           uri:item.track.uri
         }
@@ -210,7 +212,28 @@ const Spotify = {
         },
         body:JSON.stringify({name:playlistName})
       })).then(response => response.status === 200);
-  }
+  },
+
+  //used to get a Track
+  getTrack(id) {
+    if(!id) {
+        return Promise.resolve(false);
+    }
+      let url = `https://api.spotify.com/v1/tracks/${id}`;
+
+      const accessToken = Spotify.getAccessToken();
+      const headers = {
+          Authorization: `Bearer ${accessToken}`
+      };
+
+      return fetch(url,{
+          method:'GET',headers:headers
+      }).then(
+        response => response.json()
+      ).then(
+        jsonResponse => console.log(jsonResponse)
+      )
+  },
 
 }
 

@@ -4,7 +4,8 @@ import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 import Spotify from '../../util/Spotify';
-import PlaylistList from '../PlaylistList/PlaylistList'
+import PlaylistList from '../PlaylistList/PlaylistList';
+import TrackToast from '../TrackToast/TrackToast';
 
 const emptyState = {
     searchResults:{
@@ -43,8 +44,9 @@ class App extends Component {
         this.savePlaylist = this.savePlaylist.bind(this);
         this.search = this.search.bind(this);
         this.getUserPlayLists = this.getUserPlayLists.bind(this);
-        this.onEdit = this.onEdit.bind(this);
-        this.onPage = this.onPage.bind(this);
+        this.switchPlaylist = this.switchPlaylist.bind(this);
+        this.switchResultPage = this.switchResultPage.bind(this);
+        this.getTrackInfo = this.getTrackInfo.bind(this);
         /*  this.changeTrack = this.changeTrack.bind(this);*/
     }
     /*
@@ -57,11 +59,11 @@ class App extends Component {
       }
     */
 
-    onPage(url) {
+    switchResultPage(url) {
       Spotify.handleSearch(url).then(searchResults => this.setState({searchResults:searchResults}));
     }
 
-    onEdit(playlistItem) {
+    switchPlaylist(playlistItem) {
       this.updatePlaylistName(playlistItem.playlistName);
       this.updatePlaylistId(playlistItem.playlistId);
       Spotify.getPlaylistTracks(playlistItem.playlistId).then(tracks => this.setState({playlistTracks:tracks}));
@@ -157,7 +159,10 @@ class App extends Component {
         this.setState({playlistTracks: tracks});
     }
 
-
+    //used to handle Track MouseOver Event
+    getTrackInfo(id) {
+      return Spotify.getTrack(id);
+    }
 
     render() {
         return (
@@ -167,9 +172,9 @@ class App extends Component {
                     <SearchBar onSearch={this.search}/>
                     <div className="App-playlist">
                         <PlaylistList
-                             getUserPlayLists={this.getUserPlayLists} onEdit={this.onEdit} playlistList={this.state.playlistList} />
+                             getUserPlayLists={this.getUserPlayLists} onEdit={this.switchPlaylist} playlistList={this.state.playlistList} />
                         <SearchResults
-                            onPage={this.onPage} onAdd={this.addTrack} searchResults={this.state.searchResults}/>
+                            onMouseOver={this.getTrackInfo} onPage={this.switchResultPage} onAdd={this.addTrack} searchResults={this.state.searchResults}/>
                         <Playlist
                             onSave={this.savePlaylist} onNameChange={this.updatePlaylistName} onRemove={this.removeTrack} playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/>
                     </div>
