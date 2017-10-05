@@ -6,11 +6,10 @@
   box-shadow: 0 4px 2px 2px #000000;
 }
 
-.TrackList {
+.SearchResultsList {
   height:840px;
   overflow-y: scroll;
 }
-
 
 .header-cont {
   margin-bottom: 10px;

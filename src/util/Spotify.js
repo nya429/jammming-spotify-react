@@ -231,8 +231,14 @@ const Spotify = {
       }).then(
         response => response.json()
       ).then(
-        jsonResponse => console.log(jsonResponse)
-      )
+        jsonResponse => {return ({
+            image:jsonResponse.album.images[1].url,
+            artist:jsonResponse.album.artists[0].name,
+            album:jsonResponse.album.name,
+            duration:jsonResponse.duration_ms,
+            preview:jsonResponse.preview_url,
+          });}
+      );
   },
 
 }

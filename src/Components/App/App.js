@@ -161,6 +161,7 @@ class App extends Component {
 
     //used to handle Track MouseOver Event
     getTrackInfo(id) {
+      //id = "0FE9t6xYkqWXU2ahLh6D8X";
       return Spotify.getTrack(id);
     }
 
