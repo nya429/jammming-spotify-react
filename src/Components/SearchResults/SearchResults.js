@@ -46,7 +46,7 @@ class SearchResults extends React.Component {
             <td key={index} onClick={(e) => this.onPage(index)} className="page" >{index}</td>
         )
       }
-      return (<div >
+      return (<div className='pagging'>
                 <h3> {searchResults.offset + 1} - {searchResults.offset + searchResults.limit > searchResults.total ? searchResults.total : searchResults.offset + searchResults.limit} of {searchResults.total} Track</h3>
                 <table>
                   <tbody>
@@ -67,8 +67,10 @@ class SearchResults extends React.Component {
                           <h2>Results</h2>
                           {this.renderPage(this.props.searchResults)}
                       </div>
-                      <TrackList
-                       isRemoval={false} onMouseOver={this.props.onMouseOver} onAdd={this.props.onAdd} tracks={this.props.searchResults.tracks}/>
+                      <div className="TrackList">
+                        <TrackList
+                        isRemoval={false} onMouseOver={this.props.onMouseOver} onAdd={this.props.onAdd} tracks={this.props.searchResults.tracks}/>
+                        </div>
                       </div>
 
             );

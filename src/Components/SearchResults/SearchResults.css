@@ -1,32 +1,56 @@
 .SearchResults {
-  width: 50%;
+  width: 30%;
   height: 950px;
-  overflow-y: scroll;
   padding: 1.88rem;
   background-color: rgba(1, 12, 63, 0.7);
   box-shadow: 0 4px 2px 2px #000000;
 }
-/*
-.header-cont {
-    position:fixed;
-    top:0px;
-    width:100%;
+
+.TrackList {
+  height:840px;
+  overflow-y: scroll;
 }
-*/
+
+
+.header-cont {
+  margin-bottom: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.header-cont h2{
+  margin-bottom: 4px;
+}
+
+.pagging {
+  display:flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.pagging h3{
+  margin-bottom: 5px;
+}
+
+
+
+table {
+           border-collapse: separate;
+           border-spacing: 2px;
+           text-align: center;
+}
+
 .page {
-  box-sizing: border-box;
+  width: 34px;
   cursor:pointer;
-  padding: 10px;
   background-color: #010c3f;
-  text-align: center;
-  font-size: .833rem;
+  font-size: 1rem;
   transition: background-color .25s;
 }
 
 .currentPage {
-
   padding: 10px;
-  text-align: center;
   font-size: 1.233rem;
   font-weight: bold;
   transition: background-color .25s;
@@ -46,4 +70,5 @@
     width: 90%;
     margin-bottom: 2rem;
   }
+
 }
