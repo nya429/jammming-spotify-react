@@ -3,8 +3,8 @@ import './PlaylistList.css';
 import PlaylistListItem from '../PlaylistListItem/PlaylistListItem';
 
 class PlaylistList extends Component {
+
   componentWillMount() {
-    console.log('componentWillMount');
     this.props.getUserPlayLists();
   }
 

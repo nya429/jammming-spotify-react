@@ -8,26 +8,25 @@ class TrackToast extends React.Component {
       trackInfo:null,
     };
   }
+
   //thanks to CSS Load
-  renderBubbling () {
-    let style = {
-      left:this.props.pos.y,
-      top:this.props.pos.y
-    }
-    return (<div style={style} className="bubblingG">
+  renderBubbling (style) {
+    return (<div style ={style} className='Toast'>
+              <div className="bubblingG">
             	<span id="bubblingG_1">
             	</span>
             	<span id="bubblingG_2">
             	</span>
             	<span id="bubblingG_3">
             	</span>
-            </div>);
+            </div>
+          </div>);
   }
 
-  renderToast() {
+  renderToast(style) {
     return (
-      <div className='Toast'>
-          <div  className='TrackName'>
+      <div style ={style} className='ToastInfo'>
+          <div  className='TrackImg'>
             <img />
           </div>
           <div>
@@ -39,10 +38,20 @@ class TrackToast extends React.Component {
       </div>
     );
   }
+
+ componentDidMount() {
+   setTimeout(() => {
+     this.setState({trackInfo:this.props.trackInfo})
+   },500);
+ }
+
   render() {
-    return (<div className='Toast'>
-              {this.renderBubbling (this.props.pos)}
-            </div>);
+    let style = {
+      left:this.props.pos.x + 'px',
+      top:this.props.pos.y + 'px',
+    }
+    return this.state.trackInfo ? this.renderToast(style) : this.renderBubbling(style);
+
   }
 }
 

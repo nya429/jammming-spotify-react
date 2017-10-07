@@ -14,6 +14,7 @@ class TrackList extends React.Component {
                     key={track.id}
                     track={track}
                     isRemoval={this.props.isRemoval}
+                    mousePos={this.props.mousePos}
                   />
                 })}
               </div>

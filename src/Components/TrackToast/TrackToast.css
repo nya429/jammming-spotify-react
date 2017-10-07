@@ -1,22 +1,53 @@
 .Toast {
 
   position:absolute;
-  margin-top:70px;
-  margin-left:124px;
+
   height:100px;
   width: 100px;
   background-color: rgba(255, 255, 255, 0.2);
   border-style: solid;
-  border-radius: 20%;
-  border-color:cyan;
   shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  z-index: 9999;
-  -webkit-animation: fadein  1.2s;
-      -moz-animation: fadein 1.2s;
-       -ms-animation: fadein 1.2s;
-        -o-animation: fadein 1.2s;
-           animation: fadein 1.2s;
+  z-index: 1;
+  -webkit-animation: fadein  0.5s;
+      -moz-animation: fadein 0.5s;
+       -ms-animation: fadein 0.5s;
+        -o-animation: fadein 0.5s;
+           animation: fadein 0.5s;
 
+}
+
+.ToastInfo {
+
+  position:absolute;
+
+  height:200px;
+  width: 300px;
+  background-color: rgba(255, 255, 255, 0.75);
+  border-width: thin;
+  border-style: solid;
+  border-color:cyan;
+  box-shadow: 0 0 10px 2000px rgba(0,0,0,0.7);
+  z-index: 1;
+  -webkit-animation: extend  0.5s;
+      -moz-animation: extend 0.5s;
+       -ms-animation: extend 0.5s;
+        -o-animation: fadein 0.5s;
+           animation: extend 0.5s;
+
+}
+
+
+@keyframes extend {
+    0% {   height:100px;
+             width: 100px;
+              background-color: rgba(255, 255, 255, 0.2);}
+
+    70%   {   height:220px;
+             width: 330px;
+             background-color: rgba(255, 255, 255, 0.75);}
+    100% {   height:200px;
+             width: 300px;
+             background-color: rgba(255, 255, 255, 0.75); }
 }
 
 @keyframes fadein {
