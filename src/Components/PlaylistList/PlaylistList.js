@@ -11,12 +11,13 @@ class PlaylistList extends Component {
   render() {
     return (
         <div className="PlaylistList">
-          <h2>PlayList</h2>
+          <h2>PlayLists</h2>
           {this.props.playlistList.map(playlistItem =>{
             return <PlaylistListItem
                 playlistItem={playlistItem}
                 key={playlistItem.playlistId}
                 onEdit={this.props.onEdit}
+                isSelected={playlistItem.playlistId === this.props.selectedPlayListId && true}
             />
           })}
         </div>

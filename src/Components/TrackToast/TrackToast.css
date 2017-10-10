@@ -1,7 +1,6 @@
 .Toast {
 
   position:absolute;
-
   height:100px;
   width: 100px;
   background-color: rgba(255, 255, 255, 0.2);
@@ -19,37 +18,60 @@
 .ToastInfo {
 
   position:absolute;
-
+  display:flex;
+  justify-content:flex-start;
   height:200px;
-  width: 300px;
-  background-color: rgba(255, 255, 255, 0.75);
+  width: 420px;
+  background-color:  rgba(1, 12, 63, 0.9);
   border-width: thin;
   border-style: solid;
-  border-color:cyan;
-  box-shadow: 0 0 10px 2000px rgba(0,0,0,0.7);
+  border-color:black;
+  box-shadow: 0 0 10px 2000px rgba(0,0,0,0.8);
   z-index: 1;
   -webkit-animation: extend  0.5s;
       -moz-animation: extend 0.5s;
        -ms-animation: extend 0.5s;
-        -o-animation: fadein 0.5s;
+        -o-animation: extend 0.5s;
            animation: extend 0.5s;
 
 }
 
-
-@keyframes extend {
-    0% {   height:100px;
-             width: 100px;
-              background-color: rgba(255, 255, 255, 0.2);}
-
-    70%   {   height:220px;
-             width: 330px;
-             background-color: rgba(255, 255, 255, 0.75);}
-    100% {   height:200px;
-             width: 300px;
-             background-color: rgba(255, 255, 255, 0.75); }
+.reverse {
+   animation: extendReverse 0.5s;
 }
 
+@keyframes extendReverse {
+    0% {      margin-top:100px;
+              height:100px;
+             width: 100px;
+              background-color: rgba(1, 12, 63, 0.2);
+              box-shadow: 0 0 10px 2000px rgba(0,0,0,0.4);}
+
+    70%   {   margin-top:-20px;
+              height:220px;
+             width: 450px;
+             background-color: rgba(1, 12, 63, 0.7);
+             box-shadow: 0 0 10px 2000px rgba(0,0,0,0.8);}
+    100% {   margin-top:0px;
+              height:200px;
+             width: 420px;
+             background-color: rgba(1, 12, 63, 0.9); }
+}
+
+@keyframes extend {
+    0% {    height:100px;
+             width: 100px;
+              background-color: rgba(1, 12, 63, 0.2);
+              box-shadow: 0 0 10px 2000px rgba(0,0,0,0.4);}
+
+    70%   {   height:220px;
+             width: 450px;
+             background-color: rgba(1, 12, 63, 0.7);
+             box-shadow: 0 0 10px 2000px rgba(0,0,0,0.8);}
+    100% {   height:200px;
+             width: 420px;
+             background-color: rgba(1, 12, 63, 0.9); }
+}
 @keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
@@ -73,6 +95,95 @@
 @-o-keyframes fadein {
     from { opacity: 0; }
     to   { opacity: 1; }
+}
+
+ .TrackImg  {
+   height:180px;
+   width:180px;
+   margin:10px
+ }
+
+ .TrackImg img {
+  height:170px;
+  width: 170px;
+  border:5px solid #99a4af;
+  border-radius: 1px;
+  box-shadow: 0 0 1px rgb(247, 248, 249), 0 0 10px 2px rgba(0,0,0,0.7);
+  z-index: 1;
+  -webkit-animation:  trackInfoFadeinV 1.5s;
+      -moz-animation: trackInfoFadeinV 1s;
+       -ms-animation: trackInfoFadeinV 1s;
+        -o-animation: trackInfoFadeinV 1s;
+           animation: trackInfoFadeinV 1s;
+
+}
+
+.TrackImg img .blink {
+  border:5px solid #mm;
+  box-shadow: 0 0 1px rgb(247, 248, 249), 0 0 10px 2px cyan;
+}
+
+//icon
+
+span{
+ dispaly:inline-block;
+}
+
+span .playerIcon {
+  background:url('./play-button.png') no-repeat;
+  height:64px;
+  width:64px;
+  position:absolute; /*not essential*/
+  top:0%;
+  margin-top:-50px;
+  left:0px;
+  background:url('./play-button.png') no-repeat;
+  width:64px;
+  height:640px;
+}
+
+@-webkit-keyframes trackInfoFadeinV {
+    0% {  height:0%;
+          opacity:0;}
+    40% { height:20%;
+          opacity:0;}
+    70%   { height:177px;}
+    100%   { height:170px;
+            opacity: 1; }
+}
+
+.TrackPreview audio {
+    display: inline-block;
+    vertical-align: top;
+    top:-100px;
+    z-index: 2;
+    border:2px solid black;
+}
+
+.TrackInfo {
+    margin:10px;
+    -webkit-animation:  trackInfoFadeinH 2s;
+        -moz-animation: trackInfoFadeinH 2s;
+         -ms-animation: trackInfoFadeinH 2s;
+          -o-animation: trackInfoFadeinH 2s;
+             animation: trackInfoFadeinH 1s;
+}
+
+@-webkit-keyframes trackInfoFadeinH {
+    0% {
+          margin-left: 60px;
+          opacity:0;}
+    70% {
+            margin-left: 60px;
+            opacity:0;}
+    100%   {
+              opacity: 1; }
+}
+
+.TrackName{
+    margin-top:5px;
+    font-size:1.2rem;
+
 }
 
 .bubblingG {

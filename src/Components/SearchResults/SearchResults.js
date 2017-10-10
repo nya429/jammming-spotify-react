@@ -33,8 +33,8 @@ class SearchResults extends React.Component {
       if(!searchResults.total) {
         return;
       }
-      if(searchResults.total === 0) {
-        return <h3> {searchResults.offset + 1} - {searchResults.offset + searchResults.limit > searchResults.total ? searchResults.total : searchResults.offset + searchResults.limit} of {searchResults.total} Track</h3>;
+      if(searchResults.total <= searchResults.limit ) {
+        return <h3>  {searchResults.total} Tracks</h3>;
       }
       let pace = 2;
       let page = searchResults.offset/searchResults.limit + 1;
@@ -48,7 +48,7 @@ class SearchResults extends React.Component {
         )
       }
       return (<div className='pagging'>
-                <h3> {searchResults.offset + 1} - {searchResults.offset + searchResults.limit > searchResults.total ? searchResults.total : searchResults.offset + searchResults.limit} of {searchResults.total} Track</h3>
+                <h3> {searchResults.offset + 1} - {searchResults.offset + searchResults.limit > searchResults.total ? searchResults.total : searchResults.offset + searchResults.limit} of {searchResults.total} Tracks</h3>
                 <table>
                   <tbody>
                     <tr>
@@ -71,7 +71,6 @@ class SearchResults extends React.Component {
     render() {
     return (
                 <div className="SearchResults">
-                {this.state.mousePos && <a>x:{this.state.mousePos.x}   y:{this.state.mousePos.y}</a>}
                       <div className="header-cont">
                           <h2>Results</h2>
                           {this.renderPage(this.props.searchResults)}

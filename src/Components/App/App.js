@@ -6,6 +6,8 @@ import Playlist from '../Playlist/Playlist';
 import Spotify from '../../util/Spotify';
 import PlaylistList from '../PlaylistList/PlaylistList';
 import TrackToast from '../TrackToast/TrackToast';
+import PreviewPlayer from '../TrackToast/PreviewPlayer';
+import Loading from '../TrackToast/Loading';
 
 const emptyState = {
     searchResults:{
@@ -36,7 +38,7 @@ class App extends Component {
             playlistName:"New PlayList",
             playlistId:null,
             playlistTracks:[],
-            playlistList:[] //Used to store an array of keys of palylist
+            playlistList:[], //Used to store an array of keys of palylist
         };
         this.addTrack = this.addTrack.bind(this);
         this.removeTrack = this.removeTrack.bind(this);
@@ -64,8 +66,11 @@ class App extends Component {
     }
 
     switchPlaylist(playlistItem) {
-      this.updatePlaylistName(playlistItem.playlistName);
+      if(this.state.playlistId === playlistItem.playlistId) {
+        return;
+      }
       this.updatePlaylistId(playlistItem.playlistId);
+      this.updatePlaylistName(playlistItem.playlistName);
       Spotify.getPlaylistTracks(playlistItem.playlistId).then(tracks => this.setState({playlistTracks:tracks}));
     }
 
@@ -173,7 +178,7 @@ class App extends Component {
                     <SearchBar onSearch={this.search}/>
                     <div className="App-playlist">
                         <PlaylistList
-                             getUserPlayLists={this.getUserPlayLists} onEdit={this.switchPlaylist} playlistList={this.state.playlistList} />
+                             selectedPlayListId={this.state.playlistId} getUserPlayLists={this.getUserPlayLists} onEdit={this.switchPlaylist} playlistList={this.state.playlistList} />
                         <SearchResults
                             onMouseOver={this.getTrackInfo} onPage={this.switchResultPage} onAdd={this.addTrack} searchResults={this.state.searchResults}/>
                         <Playlist

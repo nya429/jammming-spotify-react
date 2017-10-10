@@ -2,6 +2,11 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid rgba(256, 256, 256, 0.8);
+  -webkit-transition: 0.3s;
+   -moz-transition: 0.3s;
+    -ms-transition: 0.3s;
+     -o-transition: 0.3s;
+        transition: 0.3s
 }
 
 .Track-action {
@@ -26,13 +31,23 @@
   text-overflow: ellipsis;
 }
 
+.Track-information h3:hover, .Track-information p:hover {
+  color: rgba(265, 265, 265, .5);
+}
+
 .Track-image img {
+  cursor:pointer;
   margin: 10px 10px 10px 4px;
   height: 60px;
   width: 60px;
-  transition-delay: 2s;
   border: 1px solid #ddd;
   shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+.Track-image img:hover {
+border-color: #3b28a0;
+ box-shadow: 0 0 4px 3px cyan;
 }
 
 .Track-information h3 {

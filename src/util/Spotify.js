@@ -231,7 +231,8 @@ const Spotify = {
       }).then(
         response => response.json()
       ).then(
-        jsonResponse => {return ({
+        jsonResponse => {console.log(jsonResponse);return ({
+            name:jsonResponse.name,
             image:jsonResponse.album.images[1].url,
             artist:jsonResponse.album.artists[0].name,
             album:jsonResponse.album.name,
