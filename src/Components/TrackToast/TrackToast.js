@@ -26,7 +26,7 @@ console.log('componentWillMount');
 
  componentDidMount() {
    console.log('componentDidMount');
-    document.addEventListener('click', this.handleClickOutside,true);
+    document.body.addEventListener('click', this.handleClickOutside,true);
    /*setTimeout(() => {
       if(this.props.trackInfo && !this.state.ready) {
         this.setState({ready:true});
@@ -51,7 +51,7 @@ console.log('componentWillMount');
      console.log('componentWillUnmount');
   //TODO: add fade out method
     if(this.state.status === 'ready') {
-      document.removeEventListener('click', this.handleClickOutside);
+      document.body.removeEventListener('click', this.handleClickOutside);
     }
   }
 
@@ -74,7 +74,7 @@ console.log('componentWillMount');
  classSet(classNames) {
     let className = '';
     for (let key in classNames) {
-      className += (classNames[key] && key) + ' ';
+      className += (classNames[key] && (key + ' ')) ;
     }
     return className.replace(/(\s*$)/g, "");
  }
@@ -84,6 +84,8 @@ console.log('componentWillMount');
       'ToastInfo':true,
       'reverse':this.isReverse()
     };
+    console.log('DEBUG externalUrl');
+    console.log(this.props.trackInfo.externalUrl);
     return (
       <div ref={(ref) => this.ref = ref} style ={style} className={this.classSet(classNames)} >
           <PreviewPlayer srcUrl={this.props.trackInfo.preview} img={this.props.trackInfo.image}/>
@@ -92,6 +94,12 @@ console.log('componentWillMount');
             <h3 className='ArtistName'>{this.props.trackInfo.artist}</h3>
             <h3 className='AlbumName'>{this.props.trackInfo.album}</h3>
             <h3 className='TimePeriod'>{this._parsetime(this.props.trackInfo.duration)}</h3>
+            <div className='Spotify'>
+              <a className='SpotifyIcon' target={'_blank'} href={this.props.trackInfo.externalUrl}></a>
+              <div className='SpotifyToast'>
+                <p>Listen on Spotify</p>
+              </div>
+            </div>
           </div>
       </div>
     );

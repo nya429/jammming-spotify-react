@@ -238,6 +238,8 @@ const Spotify = {
             album:jsonResponse.album.name,
             duration:jsonResponse.duration_ms,
             preview:jsonResponse.preview_url,
+            externalUrl:jsonResponse.external_urls.spotify, //{'spotify':"https://..."}
+
           });}
       );
   },
