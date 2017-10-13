@@ -16,7 +16,7 @@ class TrackToast extends React.Component {
   _parsetime(ms) {
     let ss = Math.floor((ms/1000) % 60);
     let mm = Math.floor((ms/1000) / 60);
-    let mmss = mm + ':' + (ss > 10 ? ss : '0' + ss);
+    let mmss = mm + ':' + (ss >= 10 ? ss : '0' + ss);
     return mmss;
   }
 
@@ -57,9 +57,9 @@ console.log('componentWillMount');
 
   //FIXME:avoid immediate invoke in the flow that would affect loading
   handleClickOutside(event) {
-     console.log('handleClickOutside');
      //TODO: this method somehow block other event for good???
      //event.stopImmediatePropagation();
+     console.log('DEBUG handleClickOutside:');
      console.log(this.ref);
 
     if (this.ref && !this.ref.contains(event.target)) {
@@ -84,16 +84,21 @@ console.log('componentWillMount');
       'ToastInfo':true,
       'reverse':this.isReverse()
     };
-    console.log('DEBUG externalUrl');
-    console.log(this.props.trackInfo.externalUrl);
     return (
       <div ref={(ref) => this.ref = ref} style ={style} className={this.classSet(classNames)} >
           <PreviewPlayer srcUrl={this.props.trackInfo.preview} img={this.props.trackInfo.image}/>
           <div className='TrackInfo'>
-            <h3 className='TrackName'>{this.props.trackInfo.name}</h3>
-            <h3 className='ArtistName'>{this.props.trackInfo.artist}</h3>
-            <h3 className='AlbumName'>{this.props.trackInfo.album}</h3>
-            <h3 className='TimePeriod'>{this._parsetime(this.props.trackInfo.duration)}</h3>
+
+            <div className='trackName'>
+              <h3 >{this.props.trackInfo.name}</h3>
+              <h3 className='Duration'>{this._parsetime(this.props.trackInfo.duration)}</h3>
+            </div>
+            <div className='Album'>
+              <h3 className="AlbumName"><span>- </span>{this.props.trackInfo.album}<span> -</span></h3>
+            </div>
+            <div  className='ArtistName'>
+              <h3 ><span>By</span> {this.props.trackInfo.artist}</h3>
+            </div>
             <div className='Spotify'>
               <a className='SpotifyIcon' target={'_blank'} href={this.props.trackInfo.externalUrl}></a>
               <div className='SpotifyToast'>

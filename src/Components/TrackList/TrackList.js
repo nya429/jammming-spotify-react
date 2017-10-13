@@ -15,6 +15,7 @@ class TrackList extends React.Component {
                     track={track}
                     isRemoval={this.props.isRemoval}
                     mousePos={this.props.mousePos}
+                    onPut={this.props.onPut}
                   />
                 })}
               </div>

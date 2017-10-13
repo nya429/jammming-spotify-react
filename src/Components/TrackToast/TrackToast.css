@@ -123,27 +123,91 @@
 
 }
 
-.TrackImg.pause {
+.TrackImg.Imgpause {
   border:5px solid #EAF8FF;
-  box-shadow: 0 0 1px rgb(247, 248, 249), 0px 0px 10px 2px cyan;
+  box-shadow: 0 0 2px 2px rgb(247, 248, 249), 0px 0px 10px 6px cyan;
+}
+
+.TrackImg.Imgpause.Imgmute {
+  border:5px solid #b6c8db;
+  box-shadow: 0 0 1px rgba(247, 248, 249, 0.6), 0px 0px 10px 2px rgba(0,255,255,0.8);
 }
 
 //icon
 .playerIcons {
-  display:block;
+  display:absolute;
 }
 
 .playIcon  {
-  opacity:0.7;
+  opacity:0.6;
   cursor:pointer;
-
   height:64px;
   width:64px;
-
   position:absolute;
   margin-left:58px;
   margin-top:-126px;
 
+  -webkit-animation: dealyFadein  0.8s;
+      -moz-animation: fadein 0.8s;
+       -ms-animation: fadein 0.8s;
+        -o-animation: fadein 0.8s;
+           animation: fadein 0.8s;
+
+  -webkit-transition: 0.1s;
+   -moz-transition: 0.1s;
+    -ms-transition: 0.1s;
+     -o-transition: 0.1s;
+        transition: 0.1s
+}
+
+ .play {
+  background:url('./play-button.png') no-repeat;
+  -webkit-filter: drop-shadow(5px 5px 7px  #221e33);
+}
+
+.pause {
+  background:url('./pause-button.png') no-repeat;
+  -webkit-filter: drop-shadow(5px 5px 7px  cyan);
+  opacity:1;
+}
+
+.pause.mute {
+  background:url('./pause-button.png') no-repeat;
+  -webkit-filter: drop-shadow(2px 2px 5px rgba(0,255,255,0.8));
+  opacity:0.8;
+}
+
+
+.pause.mute:hover {
+  opacity:0.9;
+}
+
+.pause.mute:active {
+  opacity:0.5;
+}
+
+.playIcon:hover {
+    opacity:0.8;
+    -webkit-filter: drop-shadow(0 0 5px  cyan, 5px 5px 7px  rgba(0,255,255,0.8));
+    filter: drop-shadow(5px 5px 7px  rgba(108, 247, 233));
+}
+
+.playIcon:active {
+
+    opacity:0.5;
+    -webkit-filter: drop-shadow(2px 2px 4px  #12101c);
+    filter: drop-shadow(2px 2px 4px  #12101c);
+}
+
+.volumeIcon  {
+  opacity:0.6;
+  cursor:pointer;
+  height:24px;
+  width:24px;
+  display:none;
+  position:absolute;
+  margin-left:146px;
+  margin-top:-36px;
   -webkit-animation: dealyFadein  0.8s;
       -moz-animation: fadein 0.8s;
        -ms-animation: fadein 0.8s;
@@ -156,17 +220,58 @@
         transition: 0.1s
 }
 
- .play {
-  background:url('./play-button.png') no-repeat;
-  -webkit-filter: drop-shadow(5px 5px 7px  #777777);
+.volumeIcon:hover {
+  opacity:0.9;
 }
 
-.pause {
-  background:url('./pause-button.png') no-repeat;
-  -webkit-filter: drop-shadow(5px 5px 7px  cyan);
-  opacity:1;
-
+.muted.volplay:hover {
+  opacity:0.9;
 }
+
+.unMuted.volplay:hover {
+  opacity:0.9;
+}
+
+.volumeIcon:active{
+  opacity: 0.5;
+}
+
+.muted.volplay:active{
+  opacity: 0.5;
+}
+
+.unMuted.volplay:active{
+  opacity: 0.5;
+  -webkit-filter: drop-shadow(3px 3px 5px  cyan);
+}
+
+
+
+.muted  {
+ background:url('./mute.png') no-repeat;
+ -webkit-filter: drop-shadow(5px 5px 7px  #221e33);
+ display:inherit;
+}
+.muted.volplay  {
+ background:url('./mute.png') no-repeat;
+ -webkit-filter: drop-shadow(5px 5px 7px  #221e33);
+ display:inherit;
+ opacity: 0.8;
+}
+
+.unMuted {
+ background:url('./volume.png') no-repeat;
+ -webkit-filter: drop-shadow(5px 5px 7px  #221e33);
+ display:inherit;
+}
+
+.unMuted.volplay {
+ background:url('./volume.png') no-repeat;
+ -webkit-filter: drop-shadow(5px 5px 7px  cyan);
+ display:inherit;
+ opacity: 1;
+}
+
 
 
 @keyframes fadein {
@@ -174,23 +279,7 @@
     60% { opacity: 0; }
 
 }
-.playIcon:hover {
 
-    opacity:0.9;
-    -webkit-filter: drop-shadow(0 0 5px  cyan, 5px 5px 7px  rgb(108, 247, 233));
-    filter: drop-shadow(5px 5px 7px  rgb(108, 247, 233));
-
-}
-
-.playIcon:active {
-
-    opacity:0.5;
-    height:70px;
-    width: 70px;
-    -webkit-filter: drop-shadow(2px 2px 4px  #12101c);
-    filter: drop-shadow(2px 2px 4px  #12101c);
-
-}
 
 @-webkit-keyframes trackInfoFadeinV {
     0% {  height:0%;
@@ -234,12 +323,52 @@
               opacity: 1; }
 }
 
-.TrackName{
-    margin-top:5px;
-    font-size:1.2rem;
-
+.trackName{
+    margin: 8px 10px 5px 0;
+    max-height:40%;
+    line-height: normal;
+    font-size:1.4rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
+.AlbumName {
+  flex-direction:row;
+  margin-right: 10px;
+  padding-top: 0.5rem;
+    border-top: 1px solid white;
+    margin-top:5px;
+    font-size:0.8vw;
+    font-weight: bold;
+    text-align: center;
+    max-height: 30%;
+    overflow-y:scroll;
+}
+
+.AlbumName span{
+  align-self: center;
+  font-weight: 200;
+  opacity: 0.8;
+}
+.ArtistName {
+      margin-right: 10px;
+      margin-top:0.6rem;
+      font-size:1rem;
+      font-weight: normal;
+      text-align: center;
+  }
+.ArtistName span{
+  font-size:0.6rem;
+  font-weight:100;
+  opacity: 0.8;
+}
+
+.Duration {
+  margin-right: 10px;
+  font-weight: normal;
+  font-size: 0.8rem;
+}
 .Spotify {
 
     flex-grow: 2;
@@ -259,7 +388,7 @@
 .SpotifyIcon {
 
   cursor:pointer;
-  opacity: 0.8;
+  opacity: 0.7;
   display: inline-block;
   align-self: flex-end;
   height:32px;
@@ -276,6 +405,7 @@
 
 }
 .SpotifyToast {
+  padding:2px;
   opacity: 0.8;
   display:none;
   position: absolute;
@@ -285,6 +415,7 @@
   margin-left: -30px;
   margin-top: -37px;
   animation: popup 0.2s;
+  background-color: rgba(0, 0, 0, 0.7);
 
 }
 

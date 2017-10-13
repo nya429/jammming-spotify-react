@@ -19,10 +19,15 @@ class SearchBar extends Component {
     this.props.onSearch(this.state.term);
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('DEBUGH')
+    //this.setState({term:nextProps.term});
+  }
+
   render() {
     return (
               <div className="SearchBar">
-                <input onChange={this.handleTermChange } placeholder="Enter A Song, Album, or Artist" />
+                <input onChange={this.handleTermChange } value={this.props.term} placeholder="Enter A Song, Album, or Artist" />
                 <a onClick={this.search}>SEARCH</a>
               </div>
             );

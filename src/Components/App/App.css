@@ -9,12 +9,18 @@ html {
 }
 
 h1 {
+  display:block;
+  position: fixed;
+  width: 100vw;
+  margin-top: 0;
   padding: .77rem 0;
   background-color: #010c3f;
   text-align: center;
   font-family: 'Poppins', sans-serif;
   font-size: 1.88rem;
   color: #fff;
+  z-index: 9999;
+
 }
 
 h1 .highlight {

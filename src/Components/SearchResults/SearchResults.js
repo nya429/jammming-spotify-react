@@ -77,7 +77,7 @@ class SearchResults extends React.Component {
                       </div>
                         <div onMouseMove={this.getMousePos} className="SearchResultsList" >
                         <TrackList
-                        isRemoval={false}  mousePos={this.state.mousePos} onMouseOver={this.props.onMouseOver} onAdd={this.props.onAdd} tracks={this.props.searchResults.tracks}/>
+                        isRemoval={false}  onPut={this.props.onPut} mousePos={this.state.mousePos} onMouseOver={this.props.onMouseOver} onAdd={this.props.onAdd} tracks={this.props.searchResults.tracks}/>
                         </div>
                       </div>
 

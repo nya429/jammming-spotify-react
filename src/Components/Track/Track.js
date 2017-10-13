@@ -17,6 +17,7 @@ class Track extends React.Component {
     this.clearToast = this.clearToast.bind(this);
     this.delayToast = this.delayToast.bind(this);
     this.toast = this.toast.bind(this);
+    this.putSearchTerm = this.putSearchTerm.bind(this);
   }
 
 renderAction() {
@@ -32,11 +33,14 @@ renderAction() {
         if(this.props.isRemoval) {
             return (<p>{this.props.track.artist}  |  {this.props.track.album}</p>);
         } else {
-            return (<p  onMouseUp={this.toast}>{this.props.track.artist}  |  {this.props.track.album}</p>);
+            return (<p><span onClick={this.putSearchTerm} >{this.props.track.artist}</span> |  <span onClick={this.putSearchTerm} >{this.props.track.album}</span></p>);
         }
 
     }
 
+  putSearchTerm(event) {
+    this.props.onPut(event.target.innerHTML);
+  }
 
   addTrack(event) {
     this.props.onAdd(this.props.track);
@@ -60,7 +64,13 @@ renderAction() {
         }
       );
   }
-
+  renderImage() {
+    return(
+    <div className="Track-image">
+      {!this.props.isRemoval && <img onMouseUp={this.toast} src={this.props.track.image} alt={this.props.track.name} />}
+      {this.props.isRemoval && <img  src={this.props.track.image} alt={this.props.track.name} />}
+    </div>);
+  }
   delayToast(event) {
         //TODO: get pageX pgetY after 500x
         //event.persist()
@@ -90,9 +100,7 @@ renderAction() {
   render() {
     return (
               <div className="Track" ref="bodyBox">
-                <div className="Track-image">
-                  <img src={this.props.track.image} alt={this.props.track.name} />
-                </div>
+                  {this.renderImage()}
                 {this.state.hover && <TrackToast outClickHandler={this.clearToast} pos={this.state.pos} trackInfo={this.state.trackToast}/>}
                 <div className="Track-information">
                   <h3>{this.props.track.name}</h3>
