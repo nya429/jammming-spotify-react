@@ -31,9 +31,17 @@ renderAction() {
 //return (<p onMouseClick={this.clearToast} onMouseUp={this.toast} onMouseEnter={this.delayToast} onMouseOut={this.clearToast}>{this.props.track.artist}  |  {this.props.track.album}</p>);
   renderTrack() {
         if(this.props.isRemoval) {
-            return (<p>{this.props.track.artist}  |  {this.props.track.album}</p>);
+            return (
+              <div className="Track-information">
+              <h3>{this.props.track.name}</h3>
+              <p>{this.props.track.artist}  |  {this.props.track.album}</p>
+              </div> );
         } else {
-            return (<p><span onClick={this.putSearchTerm} >{this.props.track.artist}</span> |  <span onClick={this.putSearchTerm} >{this.props.track.album}</span></p>);
+            return (
+              <div className="Track-information">
+              <h3 onMouseUp={this.toast}>{this.props.track.name}</h3>
+              <p><span onClick={this.putSearchTerm} >{this.props.track.artist}</span> |  <span onClick={this.putSearchTerm} >{this.props.track.album}</span></p>
+              </div> );
         }
 
     }
@@ -64,6 +72,7 @@ renderAction() {
         }
       );
   }
+
   renderImage() {
     return(
     <div className="Track-image">
@@ -71,6 +80,8 @@ renderAction() {
       {this.props.isRemoval && <img  src={this.props.track.image} alt={this.props.track.name} />}
     </div>);
   }
+
+  //used to handleHover, unable to solve the event tree
   delayToast(event) {
         //TODO: get pageX pgetY after 500x
         //event.persist()
@@ -102,10 +113,7 @@ renderAction() {
               <div className="Track" ref="bodyBox">
                   {this.renderImage()}
                 {this.state.hover && <TrackToast outClickHandler={this.clearToast} pos={this.state.pos} trackInfo={this.state.trackToast}/>}
-                <div className="Track-information">
-                  <h3>{this.props.track.name}</h3>
                   {this.renderTrack()}
-                </div>
                    {this.renderAction()}
               </div>
             );

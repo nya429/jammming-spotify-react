@@ -16,7 +16,7 @@ class TrackToast extends React.Component {
   _parsetime(ms) {
     let ss = Math.floor((ms/1000) % 60);
     let mm = Math.floor((ms/1000) / 60);
-    let mmss = mm + ':' + (ss >= 10 ? ss : '0' + ss);
+    let mmss = mm + ':' + ((ss >= 10 ) ? ss : ('0' + ss));
     return mmss;
   }
 
@@ -57,6 +57,7 @@ console.log('componentWillMount');
 
   //FIXME:avoid immediate invoke in the flow that would affect loading
   handleClickOutside(event) {
+    event.preventDefault();
      //TODO: this method somehow block other event for good???
      //event.stopImmediatePropagation();
      console.log('DEBUG handleClickOutside:');
@@ -86,7 +87,7 @@ console.log('componentWillMount');
     };
     return (
       <div ref={(ref) => this.ref = ref} style ={style} className={this.classSet(classNames)} >
-          <PreviewPlayer srcUrl={this.props.trackInfo.preview} img={this.props.trackInfo.image}/>
+          <PreviewPlayer clear={this.props.outClickHandler} srcUrl={this.props.trackInfo.preview} img={this.props.trackInfo.image}/>
           <div className='TrackInfo'>
 
             <div className='trackName'>

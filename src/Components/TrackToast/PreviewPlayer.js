@@ -4,16 +4,6 @@ import './TrackToast.css';
 //TODO: clearify the DATAurl when using Inline style e.g. backg-img in Child Component
 
 let fade = '';
-class Music extends  React.Component {
-
-  render() {
-    return (<div>
-              <a>{this.props.time}</a>
-              <p>-Powered by Spotify</p>
-            </div>);
-  }
-}
-
 
 class PreviewPlayer extends React.Component {
       constructor(props) {
@@ -26,13 +16,14 @@ class PreviewPlayer extends React.Component {
             vol:1,
             bmp:90
           };
-          this.fade='',
+          this.fade= '';
           this.audio ='';
           this.musicPlay = this.musicPlay.bind(this);
           this.lapse = this.lapse.bind(this);
           this.handleEnded = this.handleEnded.bind(this);
           this.handleReady = this.handleReady.bind(this);
           this.toggleMute = this.toggleMute.bind(this);
+          this.handleKeyEvent = this.handleKeyEvent.bind(this);
       }
 
       musicPlay(event) {
@@ -49,7 +40,8 @@ class PreviewPlayer extends React.Component {
 
       componentDidMount() {
             this.audio.addEventListener('canplay',this.handleReady,false);
-            this.audio.addEventListener('timeupdate',this.lapse,false);
+            this.audio.addEventListener('timeupdate',this.lapse,false);       //TODO:should be useful, but it turns out I have no time
+            document.addEventListener('keydown',this.handleKeyEvent,false);
             this.audio.addEventListener('ended',this.handleEnded,false);
       }
 
@@ -57,6 +49,7 @@ class PreviewPlayer extends React.Component {
         clearInterval(this.fade);
         this.audio.removeEventListener('canplay',this.handleReady);
         this.audio.removeEventListener('timeupdate',this.lapse);
+        document.removeEventListener('keydown',this.handleKeyEvent,false);
         this.audio.removeEventListener('ended',this.handleEnded);
       }
 
@@ -64,10 +57,82 @@ class PreviewPlayer extends React.Component {
         this.setState({isReady:true});
       }
 
+      lapse(event) {
+        if(!isNaN(this.audio.duration)) {
+        let remain= this.audio.duration - this.audio.currentTime;
+        let remainMin = Math.floor(remain/60);
+        let remainSecond = Math.floor(remain%60);
+        let surplusTime = remainMin + ':' + remainSecond < 10 ?  '0' + remainSecond : remainSecond;
+        this.setState({lapse:surplusTime});
+        }
+      }
+
+      handleKeyEvent(event) {
+        event.preventDefault();
+
+        console.log("DEBUG key evenet" );
+        console.log(event.key);
+        let keyName = event.key;
+        switch(keyName) {
+          case ' ' : this.musicPlay();
+          break;
+          case 'M': case 'm': this.toggleMute();
+          break;
+          case 'Escape' : this.props.clear();
+          break;
+          case 'ArrowUp' : this.volumeChange('volUp');
+          break;
+          case 'ArrowDown' : this.volumeChange('volDown');
+          break;
+          default:
+          break;
+          }
+        }
+
+
       handleEnded(event) {
           this.setState({isPlay:false});
       }
 
+
+      volumeChange(volDir) {
+        console.log('DEBUG volume' + this.audio.volume)
+        clearInterval(this.fade);
+        let audio = this.audio;
+        let volUnit = 2;
+        let volume = Math.floor(audio.volume * 100);
+        switch(volDir) {
+          case 'volUp' : {
+            if(volume >= 100)
+              return;
+
+              if(volume >= 99) {
+                audio.volume = 1;
+                break;
+              }
+
+              audio.volume = (volume + volUnit) / 100;
+            }
+          break;
+          case 'volDown' : {
+            if(volume <= 0 )
+              return;
+
+              if(volume <= 1) {
+                audio.volume = 0;
+                break;
+              }
+
+              audio.volume = (volume - volUnit) / 100;
+          }
+          break;
+          default:
+          break;
+        }
+        let isMute = audio.volume === 0 ? true : false;
+        this.setState({vol:audio.volume,
+                      mute:isMute});
+      }
 
       toggleMute(event) {
           let audio = this.audio;
@@ -108,16 +173,6 @@ class PreviewPlayer extends React.Component {
             audio.volume = (Math.floor(audio.volume * 100) + volUnit) / 100;
           }
         },10);
-      }
-
-      lapse(event) {
-        if(!isNaN(this.audio.duration)) {
-        let remain= this.audio.duration - this.audio.currentTime;
-        let remainMin = Math.floor(remain/60);
-        let remainSecond = Math.floor(remain%60);
-        let surplusTime = remainMin + ':' + remainSecond < 10 ?  '0' + remainSecond : remainSecond;
-        this.setState({lapse:surplusTime});
-        }
       }
 
       classSet(classNames) {

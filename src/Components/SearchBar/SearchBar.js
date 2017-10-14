@@ -5,10 +5,31 @@ class SearchBar extends Component {
   constructor(props) {
     super(props);
     this.state={
-      term:""
+      term:"",
+      SearchBarClassName:''
     };
+    this.className='';
     this.search = this.search.bind(this);
     this.handleTermChange = this.handleTermChange.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+  }
+
+  handleKeyDown(event) {
+    let keyName = event.key;
+    if(keyName === 'Enter') {
+      this.props.onSearch(this.state.term);
+      this.setState({SearchBarClassName:'SearchBarHover'});
+    }
+  }
+
+  handleKeyUp(event) {
+
+
+    let keyName = event.key;
+    if(keyName === 'Enter') {
+      this.setState({SearchBarClassName:''});
+    }
   }
 
   handleTermChange(event) {
@@ -20,15 +41,15 @@ class SearchBar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('DEBUGH')
-    //this.setState({term:nextProps.term});
+    if(nextProps.term !== '')
+    this.setState({term:nextProps.term});
   }
 
   render() {
     return (
               <div className="SearchBar">
-                <input onChange={this.handleTermChange } value={this.props.term} placeholder="Enter A Song, Album, or Artist" />
-                <a onClick={this.search}>SEARCH</a>
+                <input onKeyUp={this.handleKeyUp} onKeyDown={this.handleKeyDown} onChange={this.handleTermChange}  value={this.state.term} placeholder="Enter A Song, Album, or Artist" />
+                <a className={this.state.SearchBarClassName} onClick={this.search}>SEARCH</a>
               </div>
             );
           }

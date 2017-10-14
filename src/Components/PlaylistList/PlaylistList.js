@@ -4,7 +4,7 @@ import PlaylistListItem from '../PlaylistListItem/PlaylistListItem';
 
 class PlaylistList extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.getUserPlayLists();
   }
 

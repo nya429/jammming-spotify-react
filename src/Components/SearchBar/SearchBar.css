@@ -32,6 +32,6 @@
   transition: background-color .25s;
 }
 
-.SearchBar a:hover {
+.SearchBar a:hover,a.SearchBarHover{
   background-color: rgba(108, 65, 233, .7);
 }

@@ -5,12 +5,8 @@ import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 import Spotify from '../../util/Spotify';
 import PlaylistList from '../PlaylistList/PlaylistList';
-import TrackToast from '../TrackToast/TrackToast';
-import PreviewPlayer from '../TrackToast/PreviewPlayer';
-import Loading from '../TrackToast/Loading';
 
 const emptyState = {
-  searchTerm:null,
     searchResults:{
       tracks:[],
       total:0,
@@ -27,7 +23,6 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          searchTerm:null,
             searchResults:{
               tracks:[],
               total:0,
@@ -42,6 +37,7 @@ class App extends Component {
             playlistTracks:[],
             playlistList:[], //Used to store an array of keys of palylist
         };
+        this.searchTerm = '';
         this.addTrack = this.addTrack.bind(this);
         this.removeTrack = this.removeTrack.bind(this);
         this.updatePlaylistName = this.updatePlaylistName.bind(this);
@@ -174,16 +170,22 @@ class App extends Component {
     }
 
     getSearchTerm(term) {
-      this.setState({searchTerm:term});
       this.search(term);
+      this.searchTerm = term;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      this.searchTerm = '';
     }
 
     render() {
+      console.log('APP render searchTerm');
+      console.log(this.searchTerm);
         return (
             <div>
                 <h1>Ja<span className="highlight">mmm</span>ing</h1>
                 <div className="App">
-                    <SearchBar term={this.state.searchTerm} onSearch={this.search}/>
+                    <SearchBar  term={this.searchTerm} onSearch={this.search}/>
                     <div className="App-playlist">
                         <PlaylistList
                              selectedPlayListId={this.state.playlistId} getUserPlayLists={this.getUserPlayLists} onEdit={this.switchPlaylist} playlistList={this.state.playlistList} />
