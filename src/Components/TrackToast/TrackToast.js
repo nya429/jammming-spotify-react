@@ -57,7 +57,6 @@ console.log('componentWillMount');
 
   //FIXME:avoid immediate invoke in the flow that would affect loading
   handleClickOutside(event) {
-    event.preventDefault();
      //TODO: this method somehow block other event for good???
      //event.stopImmediatePropagation();
      console.log('DEBUG handleClickOutside:');
@@ -69,7 +68,9 @@ console.log('componentWillMount');
   }
 
   renderLoading(style) {
-    return <Loading style={style}/>
+    return (<div  style ={style} className='Toast'>
+                <Loading />
+            </div> );
   }
 
  classSet(classNames) {

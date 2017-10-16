@@ -5,6 +5,8 @@ import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
 import Spotify from '../../util/Spotify';
 import PlaylistList from '../PlaylistList/PlaylistList';
+import Header from '../Header/Header';
+import ToastInformation from '../ToastInformation/ToastInformation';
 
 const emptyState = {
     searchResults:{
@@ -14,7 +16,7 @@ const emptyState = {
       page:null,
       previous:null
     },
-    playlistName:"New PlayList",
+    playlistName:"",
     playlistId:null,
     playlistTracks:[]
     };
@@ -23,7 +25,11 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchResults:{
+            isToast:false,  //identify toast status
+            isFetch:false, // identify loading status
+            isUpload:false, //used to 1) identify the time for re-fetch PlaylistList 2) block multiple opting
+            toastInformation:'',
+              searchResults:{
               tracks:[],
               total:0,
               next:null,
@@ -32,11 +38,12 @@ class App extends Component {
               previous:null,
               href:null
             },
-            playlistName:"New PlayList",
+            playlistName:"",
             playlistId:null,
             playlistTracks:[],
             playlistList:[], //Used to store an array of keys of palylist
         };
+
         this.searchTerm = '';
         this.addTrack = this.addTrack.bind(this);
         this.removeTrack = this.removeTrack.bind(this);
@@ -48,6 +55,7 @@ class App extends Component {
         this.switchResultPage = this.switchResultPage.bind(this);
         this.getTrackInfo = this.getTrackInfo.bind(this);
         this.getSearchTerm = this.getSearchTerm.bind(this);
+        this.delayToast = this.delayToast.bind(this);
         /*  this.changeTrack = this.changeTrack.bind(this);*/
     }
     /*
@@ -66,7 +74,11 @@ class App extends Component {
 
     switchPlaylist(playlistItem) {
       if(this.state.playlistId === playlistItem.playlistId) {
-        return;
+        return this.setState({
+            playlistName:"",
+            playlistId:null,
+            playlistTracks:[]
+          });
       }
       this.updatePlaylistId(playlistItem.playlistId);
       this.updatePlaylistName(playlistItem.playlistName);
@@ -74,27 +86,35 @@ class App extends Component {
     }
 
     getUserPlayLists() {
-      console.log('getUserPlayLists')
       Spotify.getUserPlayLists().then(playlists => {this.setState({playlistList:playlists})});
     }
 
     search(searchTerm) {
-        Spotify.search(searchTerm).then(searchResults => this.setState({searchResults:searchResults})
-      );
+        Spotify.search(searchTerm).then(searchResults => this.setState({searchResults:searchResults,isFetch:false}));
+        this.setState({isFetch:true});
     }
 
     savePlaylist(event) {
+        if(this.state.isUpload)
+          return;
+
         const trackUris = this.state.playlistTracks.map(playlistTrack => playlistTrack.id);
         const playlistName = this.state.playlistName;
         const playlistId = this.state.playlistId;
 
-        if(!(playlistName&&trackUris.length)) {
-            return alert('Fail to createPlaylist');//Not sure is that right;
+        if(!playlistName) {
+            return this.renderToast('Enter a name');//Not sure is that right;
         }
 
+        if(!trackUris.length) {
+            return this.renderToast('Pick a track');//Not sure is that right;
+        }
+
+        this.setState({isUpload:true});
         //The playlistId is in the playlistList,
         //1) update the playlistName
-        //2) update the playlistTrack TODO: uncheck state of playlistTracks
+        //2) update the playlistTrack
+        //TODO: uncheck state of playlistTracks
         if(playlistId) {
           return this.updateCurrentPlaylist(playlistId,playlistName,trackUris);
         }
@@ -108,8 +128,13 @@ class App extends Component {
         playlistId => Spotify.updatePlaylistTracks(trackUris,playlistId)
       ).then(status => {
                           if(status) {
-                            alert('PlayList Created');
+                            this.getUserPlayLists();
+                            this.renderToast('Playlist  Created');
+                            this.setState({isUpload:false});
                             this.setState(emptyState);
+                          } else {
+                            this.setState({isUpload:false});
+                            this.renderToast('Fail');
                           }
                         }
              );
@@ -134,7 +159,9 @@ class App extends Component {
     updatePlaylistTracks(trackUris,playlistId) {
       return Spotify.updatePlaylistTracks(trackUris,playlistId).then(status => {
         if(status) {
-            alert('PlayList updated');
+            this.getUserPlayLists();
+            this.renderToast('Playlist updated');
+            this.setState({isUpload:false});
             this.setState(emptyState);
             }
           });
@@ -165,7 +192,6 @@ class App extends Component {
 
     //used to handle Track MouseOver Event
     getTrackInfo(id) {
-      //id = "0FE9t6xYkqWXU2ahLh6D8X";
       return Spotify.getTrack(id);
     }
 
@@ -176,14 +202,23 @@ class App extends Component {
 
     componentDidUpdate(prevProps, prevState) {
       this.searchTerm = '';
+      console.log('DEBUG componentDidUpdate this.state.playlistTracks')
+        console.log(this.state.playlistTracks);
+    }
+
+    renderToast (toastInformation) {
+      this.setState({isToast:true,toastInformation:toastInformation});
+      setTimeout(this.delayToast,800);
+    }
+
+    delayToast () {
+      this.setState({isToast:false});
     }
 
     render() {
-      console.log('APP render searchTerm');
-      console.log(this.searchTerm);
         return (
             <div>
-                <h1>Ja<span className="highlight">mmm</span>ing</h1>
+              <Header load={this.state.isUpload || this.state.isFetch }/>
                 <div className="App">
                     <SearchBar  term={this.searchTerm} onSearch={this.search}/>
                     <div className="App-playlist">
@@ -193,6 +228,7 @@ class App extends Component {
                             onPut={this.getSearchTerm} onMouseOver={this.getTrackInfo} onPage={this.switchResultPage} onAdd={this.addTrack} searchResults={this.state.searchResults}/>
                         <Playlist
                             onSave={this.savePlaylist} onNameChange={this.updatePlaylistName} onRemove={this.removeTrack} playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/>
+                        <ToastInformation isToast={this.state.isToast} toastInformation={this.state.toastInformation}/>
                     </div>
                 </div>
             </div>

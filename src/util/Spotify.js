@@ -211,7 +211,9 @@ const Spotify = {
             'Content-Type': 'application/json'
         },
         body:JSON.stringify({name:playlistName})
-      })).then(response => response.status === 200);
+      })).then(response => {
+          console.log('DEBUG ') //TODO check status code here
+        return response.status === 200});
   },
 
   //used to get a Track

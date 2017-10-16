@@ -4,7 +4,7 @@ import './TrackToast.css';
 class Loading extends React.Component {
   //thanks to CSS Load
   render() {
-    return (<div  style ={this.props.style} className='Toast'>
+    return (
               <div className="bubblingG">
               <span id="bubblingG_1">
               </span>
@@ -13,7 +13,7 @@ class Loading extends React.Component {
               <span id="bubblingG_3">
               </span>
             </div>
-          </div>);
+          );
   }
 }
 

@@ -102,29 +102,24 @@ class PreviewPlayer extends React.Component {
         let volUnit = 2;
         let volume = Math.floor(audio.volume * 100);
         switch(volDir) {
-          case 'volUp' : {
+          case 'volUp' :
             if(volume >= 100)
               return;
-
               if(volume >= 99) {
                 audio.volume = 1;
                 break;
               }
-
               audio.volume = (volume + volUnit) / 100;
-            }
           break;
-          case 'volDown' : {
+          case 'volDown' :
             if(volume <= 0 )
               return;
-
               if(volume <= 1) {
                 audio.volume = 0;
                 break;
               }
-
               audio.volume = (volume - volUnit) / 100;
-          }
+
           break;
           default:
           break;
@@ -145,14 +140,10 @@ class PreviewPlayer extends React.Component {
       muteMusic(audio,volUnit) {
         clearInterval(fade);
         //this.audio.volume = this.state.mute ? this.state.vol : 0;
-        console.log('DEBUG muteMusic start');
-        console.log(audio.volume);
          fade = setInterval(function() {
             if(audio.volume <= 0.05) {
               audio.volume = 0;
               clearInterval(fade);
-              console.log('DEBUG muteMusic ended');
-              console.log(audio.volume);
             } else {
             audio.volume = (Math.floor(audio.volume * 100) - volUnit) / 100;
           }
@@ -160,15 +151,11 @@ class PreviewPlayer extends React.Component {
       }
 
       unmuteMusic(audio,volUnit,vol) {
-        console.log('DEBUG unmuteMusic start');
-        console.log(audio.volume);
         clearInterval(fade);
           fade = setInterval(function() {
             if(audio.volume >= vol || audio.volume >= 0.95) {
               audio.volume = vol;
               clearInterval(fade);
-              console.log('DEBUG unmuteMusic ended');
-              console.log(audio.volume);
             } else {
             audio.volume = (Math.floor(audio.volume * 100) + volUnit) / 100;
           }
