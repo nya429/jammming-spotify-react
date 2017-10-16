@@ -58,6 +58,7 @@ class App extends Component {
         this.getTrackInfo = this.getTrackInfo.bind(this);
         this.getSearchTerm = this.getSearchTerm.bind(this);
         this.delayToast = this.delayToast.bind(this);
+        this.delayHeaderLoad = this.delayHeaderLoad.bind(this);
         /*  this.changeTrack = this.changeTrack.bind(this);*/
     }
     /*
@@ -75,7 +76,6 @@ class App extends Component {
     }
 
     switchPlaylist(playlistItem) {
-      console.log('DEBUG switchPlaylist')
       if(this.state.playlistId === playlistItem.playlistId) {
         return this.setState({
             playlistName:"",
@@ -132,54 +132,49 @@ class App extends Component {
     createPlaylist(playlistId,playlistName,trackUris) {
       return Spotify.createPlaylist(playlistName).then(
         playlistId => Spotify.updatePlaylistTracks(trackUris,playlistId)
-      ).then(status => {
-                          if(status) {
-                            this.getUserPlayLists();
-                            this.renderToast('Playlist  Created');
-                            this.setState({isUpload:false});
-                            this.setState(emptyState);
-                          } else {
-                            this.setState({isUpload:false});
-                            this.renderToast('Fail');
-                          }
-                        }
-             );
+      ).then(status =>  this.updatefinished(status,'create'));
     }
 
     updateCurrentPlaylist(playlistId,playlistName,trackUris) {
 
       let savedplaylistName = this.state.playlistList.filter(playlist => playlist.playlistId === playlistId.toString())[0].playlistName;
 
-      if(playlistName === savedplaylistName & this.state.savedTracks === this.state.playlistTracks) {
-        this.setState({isUpload:false});
+      if(playlistName === savedplaylistName && this.state.savedTracks.toString() === this.state.playlistTracks.toString() ) { //Temp solution for array compare
+        this.renderHeader();
+        console.log('renderHeader');
         return this.renderToast('Nothing has changed');
       }
 
       if (playlistName === savedplaylistName) {   //The playlistName has not changed, only update the PlaylistTracks
         return this.updatePlaylistTracks(trackUris,playlistId);
       } else if (this.state.savedTracks === this.state.playlistTracks) {
-        return Spotify.updatePlaylistName(playlistId,playlistName).then(status => this.updatefinished(status)); //The PlaylistTracks  has not changed, only update the playlistName
+         return this.updatePlaylistName(playlistId,playlistName);//The PlaylistTracks  has not changed, only update the playlistName
       } else {
       //The playlistName and Tracks both have changed,  update both
+      //TODO: check status in Nameupload
               return Spotify.updatePlaylistName(playlistId,playlistName).then(
                 () => this.updatePlaylistTracks(trackUris,playlistId)
               );
             }
       }
 
-
-    updatePlaylistTracks(trackUris,playlistId) {
-      return Spotify.updatePlaylistTracks(trackUris,playlistId).then(status => this.updatefinished(status));
+    updatePlaylistName(playlistId,playlistName) {
+      return Spotify.updatePlaylistName(playlistId,playlistName).then(status => this.updatefinished(status,'upload'));
     }
 
-    updatefinished (status) {
-      this.setState({isUpload:false});
+    updatePlaylistTracks(trackUris,playlistId) {
+      return Spotify.updatePlaylistTracks(trackUris,playlistId).then(status => this.updatefinished(status,'upload'));
+    }
+
+    //handle render result of different status code
+    updatefinished (status,method) {
+      this.renderHeader();
       if(status) {
           this.getUserPlayLists();
-          this.renderToast('Playlist updated');
+          this.renderToast(method === 'create' ? 'Playlist Created' : 'Playlist Uploaded');
           this.setState(emptyState);
         } else {
-          this.renderToast('Fail Updated');
+          this.renderToast(method === 'create' ? 'Fail Created' : 'Fail Updated');
         }
     }
 
@@ -204,10 +199,6 @@ class App extends Component {
         }
         tracks.push(track);
         this.setState({playlistTracks: tracks});
-        console.log('playlistTracks')
-        console.log(this.state.playlistTracks)
-        console.log('savedTracks ')
-        console.log(this.state.savedTracks )
     }
 
     //used to handle Track MouseOver Event
@@ -222,6 +213,7 @@ class App extends Component {
 
     componentDidUpdate(prevProps, prevState) {
       this.searchTerm = '';
+
     }
 
     renderToast (toastInformation) {
@@ -231,6 +223,14 @@ class App extends Component {
 
     delayToast () {
       this.setState({isToast:false});
+    }
+
+    renderHeader() {
+      setTimeout(this.delayHeaderLoad,300);
+    }
+
+    delayHeaderLoad () {
+      this.setState({isUpload:false});
     }
 
     render() {
