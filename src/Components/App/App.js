@@ -18,7 +18,8 @@ const emptyState = {
     },
     playlistName:"",
     playlistId:null,
-    playlistTracks:[]
+    playlistTracks:[],
+    savedTracks:[],
     };
 
 class App extends Component {
@@ -42,6 +43,7 @@ class App extends Component {
             playlistId:null,
             playlistTracks:[],
             playlistList:[], //Used to store an array of keys of palylist
+            savedTracks:[], //used to store an array of currentTracks of selected playlist
         };
 
         this.searchTerm = '';
@@ -73,6 +75,7 @@ class App extends Component {
     }
 
     switchPlaylist(playlistItem) {
+      console.log('DEBUG switchPlaylist')
       if(this.state.playlistId === playlistItem.playlistId) {
         return this.setState({
             playlistName:"",
@@ -82,7 +85,9 @@ class App extends Component {
       }
       this.updatePlaylistId(playlistItem.playlistId);
       this.updatePlaylistName(playlistItem.playlistName);
-      Spotify.getPlaylistTracks(playlistItem.playlistId).then(tracks => this.setState({playlistTracks:tracks}));
+      Spotify.getPlaylistTracks(playlistItem.playlistId).then(tracks => {
+        this.setState({playlistTracks:tracks,savedTracks:tracks.slice(0)})  //temp solution for deep copy
+      });
     }
 
     getUserPlayLists() {
@@ -114,7 +119,8 @@ class App extends Component {
         //The playlistId is in the playlistList,
         //1) update the playlistName
         //2) update the playlistTrack
-        //TODO: uncheck state of playlistTracks
+        //TODO: solve unnecessary request : uncheck state of playlistTracks
+
         if(playlistId) {
           return this.updateCurrentPlaylist(playlistId,playlistName,trackUris);
         }
@@ -144,11 +150,17 @@ class App extends Component {
 
       let savedplaylistName = this.state.playlistList.filter(playlist => playlist.playlistId === playlistId.toString())[0].playlistName;
 
-      //The playlistName has not changed, only update the PlaylistTracks
-      if (playlistName === savedplaylistName) {
-        this.updatePlaylistTracks(trackUris,playlistId);
+      if(playlistName === savedplaylistName & this.state.savedTracks === this.state.playlistTracks) {
+        this.setState({isUpload:false});
+        return this.renderToast('Nothing has changed');
+      }
+
+      if (playlistName === savedplaylistName) {   //The playlistName has not changed, only update the PlaylistTracks
+        return this.updatePlaylistTracks(trackUris,playlistId);
+      } else if (this.state.savedTracks === this.state.playlistTracks) {
+        return Spotify.updatePlaylistName(playlistId,playlistName).then(status => this.updatefinished(status)); //The PlaylistTracks  has not changed, only update the playlistName
       } else {
-      //The playlistName has changed,  update the both PlaylistTracks and playlistName
+      //The playlistName and Tracks both have changed,  update both
               return Spotify.updatePlaylistName(playlistId,playlistName).then(
                 () => this.updatePlaylistTracks(trackUris,playlistId)
               );
@@ -157,14 +169,18 @@ class App extends Component {
 
 
     updatePlaylistTracks(trackUris,playlistId) {
-      return Spotify.updatePlaylistTracks(trackUris,playlistId).then(status => {
-        if(status) {
-            this.getUserPlayLists();
-            this.renderToast('Playlist updated');
-            this.setState({isUpload:false});
-            this.setState(emptyState);
-            }
-          });
+      return Spotify.updatePlaylistTracks(trackUris,playlistId).then(status => this.updatefinished(status));
+    }
+
+    updatefinished (status) {
+      this.setState({isUpload:false});
+      if(status) {
+          this.getUserPlayLists();
+          this.renderToast('Playlist updated');
+          this.setState(emptyState);
+        } else {
+          this.renderToast('Fail Updated');
+        }
     }
 
     updatePlaylistName (playlistNaem) {
@@ -188,6 +204,10 @@ class App extends Component {
         }
         tracks.push(track);
         this.setState({playlistTracks: tracks});
+        console.log('playlistTracks')
+        console.log(this.state.playlistTracks)
+        console.log('savedTracks ')
+        console.log(this.state.savedTracks )
     }
 
     //used to handle Track MouseOver Event
@@ -202,8 +222,6 @@ class App extends Component {
 
     componentDidUpdate(prevProps, prevState) {
       this.searchTerm = '';
-      console.log('DEBUG componentDidUpdate this.state.playlistTracks')
-        console.log(this.state.playlistTracks);
     }
 
     renderToast (toastInformation) {
