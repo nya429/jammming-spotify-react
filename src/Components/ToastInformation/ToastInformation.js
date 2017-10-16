@@ -5,8 +5,12 @@ import './ToastInformation.css';
 class ToastInformation extends React.Component {
 
   toggleToast() {
-          return this.props.isToast ? 'ToastContainer visible' : 'ToastContainer';
-  }
+          if (this.props.isToast === null) {
+            return 'ToastContainer';
+          } else {
+          return this.props.isToast ? 'ToastContainer visible' : 'ToastContainer invisible';
+          }
+    }
 
   render() {
     return (

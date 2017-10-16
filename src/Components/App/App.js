@@ -25,7 +25,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isToast:false,  //identify toast status
+            isToast:null,  //identify toast status
             isFetch:false, // identify loading status
             isUpload:false, //used to 1) identify the time for re-fetch PlaylistList 2) block multiple opting
             toastInformation:'',

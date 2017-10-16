@@ -16,14 +16,16 @@
   z-index: 1;
   opacity: 0;
   visibility: hidden;
+}
+
+.invisible {
+  visibility: hidden;
   -webkit-animation: toastV  1.1s;
       -moz-animation: toastV 1.1s;
        -ms-animation: toastV 1.1s;
         -o-animation: toastV 1.1s;
            animation: toastV 1.1s;
-
 }
-
 .visible {
   opacity: 1;
   visibility: visible;
