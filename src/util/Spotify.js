@@ -1,5 +1,5 @@
 const clientId = '429c0efa1b924e15a334ed5a3c7b259c';
-const redirectUri = 'http://localhost:3000/';
+const redirectUri = 'http://jammming-429.herokuapp.com/';
 const scope = 'playlist-modify-public';
 let accessToken;
 let userId;
